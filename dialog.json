@@ -1,0 +1,154 @@
+{
+    "languageModel": {
+        "invocationName": "体重グラフ",
+        "intents": [
+            {
+                "name": "AMAZON.CancelIntent",
+                "slots": [],
+                "samples": [
+                    "やっぱりやめる",
+                    "取り消し",
+                    "キャンセル"
+                ]
+            },
+            {
+                "name": "AMAZON.HelpIntent",
+                "slots": [],
+                "samples": [
+                    "使い方は",
+                    "教えて",
+                    "助けて",
+                    "ヘルプ"
+                ]
+            },
+            {
+                "name": "AMAZON.StopIntent",
+                "slots": [],
+                "samples": [
+                    "終了",
+                    "終わり",
+                    "完了"
+                ]
+            },
+            {
+                "name": "weight",
+                "slots": [
+                    {
+                        "name": "FirstWholeNumber",
+                        "type": "AMAZON.NUMBER",
+                        "samples": [
+                            "体重は{FirstWholeNumber}キログラムと記録しました。"
+                        ]
+                    },
+                    {
+                        "name": "DotNumber",
+                        "type": "AMAZON.FOUR_DIGIT_NUMBER"
+                    },
+                    {
+                        "name": "kg",
+                        "type": "kg"
+                    }
+                ],
+                "samples": [
+                    "{FirstWholeNumber} とつけて",
+                    "{FirstWholeNumber} でつけて",
+                    "{FirstWholeNumber} をつけて",
+                    "{FirstWholeNumber} を",
+                    "{FirstWholeNumber} 点 {DotNumber} を",
+                    "{FirstWholeNumber} 点 {DotNumber} を記録してくれる",
+                    "{FirstWholeNumber} を記録してくれる",
+                    "{FirstWholeNumber} で",
+                    "{FirstWholeNumber} 点 {DotNumber} で",
+                    "{FirstWholeNumber} 点 {DotNumber} で記録してくれる",
+                    "{FirstWholeNumber} で記録してくれる",
+                    "{FirstWholeNumber} と",
+                    "{FirstWholeNumber} 点 {DotNumber} と",
+                    "{FirstWholeNumber} 点 {DotNumber} と記録してくれる",
+                    "{FirstWholeNumber} 点 {DotNumber}",
+                    "{FirstWholeNumber} と記録してくれる",
+                    "{FirstWholeNumber}",
+                    "{FirstWholeNumber} {kg} とつけて",
+                    "{FirstWholeNumber} {kg} でつけて",
+                    "{FirstWholeNumber} {kg} をつけて",
+                    "{FirstWholeNumber} {kg} を",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} を",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} を記録してくれる",
+                    "{FirstWholeNumber} {kg} を記録してくれる",
+                    "{FirstWholeNumber} {kg} で",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} で",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} で記録してくれる",
+                    "{FirstWholeNumber} {kg} で記録してくれる",
+                    "{FirstWholeNumber} {kg} と",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} と",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg} と記録してくれる",
+                    "{FirstWholeNumber} 点 {DotNumber} {kg}",
+                    "{FirstWholeNumber} {kg} と記録してくれる",
+                    "{FirstWholeNumber} {kg}"
+                ]
+            }
+        ],
+        "types": [
+            {
+                "name": "kg",
+                "values": [
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "kg",
+                            "synonyms": [
+                                "キログラム",
+                                "キロ",
+                                "k"
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "dialog": {
+        "intents": [
+            {
+                "name": "weight",
+                "confirmationRequired": false,
+                "prompts": {},
+                "slots": [
+                    {
+                        "name": "FirstWholeNumber",
+                        "type": "AMAZON.NUMBER",
+                        "confirmationRequired": false,
+                        "elicitationRequired": true,
+                        "prompts": {
+                            "elicitation": "Elicit.Intent-weight.IntentSlot-FirstWholeNumber"
+                        }
+                    },
+                    {
+                        "name": "DotNumber",
+                        "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                        "confirmationRequired": false,
+                        "elicitationRequired": false,
+                        "prompts": {}
+                    },
+                    {
+                        "name": "kg",
+                        "type": "kg",
+                        "confirmationRequired": false,
+                        "elicitationRequired": false,
+                        "prompts": {}
+                    }
+                ]
+            }
+        ]
+    },
+    "prompts": [
+        {
+            "id": "Elicit.Intent-weight.IntentSlot-FirstWholeNumber",
+            "variations": [
+                {
+                    "type": "PlainText",
+                    "value": "体重をキログラムで答えてください。"
+                }
+            ]
+        }
+    ]
+}

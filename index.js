@@ -1,3 +1,8 @@
+// $Id$
+
+// Copyright (C) 2018 Yoshiro MIHIRA
+// For license information, see LICENSE.txt
+
 'use strict';
 
 const Alexa = require('alexa-sdk');
@@ -116,6 +121,9 @@ const handlers = {
     },
     'AMAZON.StopIntent': function () {
         this.emit(':tell', '終了します。');
+    },
+    Unhandled: function() {
+        help(this);
     },
 };
  

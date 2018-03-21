@@ -10,6 +10,7 @@ const rp = require("request-promise");
 
 process.env.TZ = "Asia/Tokyo";
 
+// please define "Environment variables " field at AWS lambda console
 const APP_ID = process.env.ALEXA_APP_ID;
 
 function help(t) {
@@ -72,6 +73,20 @@ function updateDiet(weight, accessToken, self) {
     });
 }
  
+function convertDotNumberStringToDotNumber(s, maxNumberOfDigit) {
+    let dotWeight = Number(s);
+    if (!isNaN(dotWeight)) {
+	for (var i = 1; i <= maxNumberOfDigit; i++) {
+	    var p = Math.pow(10, i);
+	    if (dotWeight < p) {
+		return dotWeight / p;
+	    }
+	}
+	return -1;
+    }
+    return 0;
+}
+
 const handlers = {
     'weight': function () {
         let accessToken = this.event.session.user.accessToken;
@@ -89,20 +104,18 @@ const handlers = {
                 if (!isNaN(weight)) {
                     if (intent.slots.DotNumber != undefined) {
                         const DotNumberString = this.event.request.intent.slots.DotNumber.value;
-                        let dotWeight = Number(DotNumberString);
-                        if (!isNaN(dotWeight)) {
-			    if (dotWeight < 10) {
-				weight = weight + dotWeight / 10;
-			    } else {
-				this.emit(':ask', '小数点以下はひと桁までの対応です。もう一度、体重を教えてください。');
-			    }
-                        }
+			var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+			if (dotNumber == -1) {
+			    this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
+                        } else {
+			    weight = weight + dotNumber;
+			}
                     }
-                    if ( 1 <= weight && weight <= 300 ) {
+                    if ( 1 <= weight && weight <= 600 ) {
                         updateDiet(weight, accessToken, this);
                         return;
                     } else {
-			this.emit(':ask', '300キログラム以下に対応しています。もう一度、体重を教えてください。');
+			this.emit(':ask', '600キログラム以下に対応しています。もう一度、体重を教えてください。');
 		    }
                 }
             }  

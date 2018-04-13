@@ -33,10 +33,7 @@
                     "slots": [
                         {
                             "name": "FirstWholeNumber",
-                            "type": "AMAZON.NUMBER",
-                            "samples": [
-                                "体重は{FirstWholeNumber}キログラムと記録しました。"
-                            ]
+                            "type": "AMAZON.NUMBER"
                         },
                         {
                             "name": "DotNumber",
@@ -45,6 +42,10 @@
                         {
                             "name": "kg",
                             "type": "kg"
+                        },
+                        {
+                            "name": "dot",
+                            "type": "dot"
                         }
                     ],
                     "samples": [
@@ -58,16 +59,16 @@
                         "{FirstWholeNumber} を",
                         "{FirstWholeNumber} をつけて",
                         "{FirstWholeNumber} を記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber}",
-                        "{FirstWholeNumber} 点 {DotNumber} と",
-                        "{FirstWholeNumber} 点 {DotNumber} とつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} と記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber} で",
-                        "{FirstWholeNumber} 点 {DotNumber} でつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} で記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber} を",
-                        "{FirstWholeNumber} 点 {DotNumber} をつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} を記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber}",
+                        "{FirstWholeNumber} {dot} {DotNumber} と",
+                        "{FirstWholeNumber} {dot} {DotNumber} とつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} と記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} で",
+                        "{FirstWholeNumber} {dot} {DotNumber} でつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} で記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} を",
+                        "{FirstWholeNumber} {dot} {DotNumber} をつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} を記録してくれる",
                         "{FirstWholeNumber} {kg}",
                         "{FirstWholeNumber} {kg} と",
                         "{FirstWholeNumber} {kg} とつけて",
@@ -78,16 +79,16 @@
                         "{FirstWholeNumber} {kg} を",
                         "{FirstWholeNumber} {kg} をつけて",
                         "{FirstWholeNumber} {kg} を記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg}",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} と",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} とつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} と記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} で",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} でつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} で記録してくれる",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} を",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} をつけて",
-                        "{FirstWholeNumber} 点 {DotNumber} {kg} を記録してくれる"
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg}",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} と",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} とつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} と記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} で",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} でつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} で記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} を",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} をつけて",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} を記録してくれる"
                     ]
                 }
             ],
@@ -106,53 +107,28 @@
                             }
                         }
                     ]
-                }
-            ]
-        },
-        "dialog": {
-            "intents": [
+                },
                 {
-                    "name": "weight",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
+                    "name": "dot",
+                    "values": [
                         {
-                            "name": "FirstWholeNumber",
-                            "type": "AMAZON.NUMBER",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Intent-weight.IntentSlot-FirstWholeNumber"
+                            "name": {
+                                "value": "dot ",
+                                "synonyms": [
+                                    "どっと",
+                                    "ドット",
+                                    "ねん",
+                                    "年",
+                                    "ふん",
+                                    "分",
+                                    "てん",
+                                    "点"
+                                ]
                             }
-                        },
-                        {
-                            "name": "DotNumber",
-                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
-                            "confirmationRequired": false,
-                            "elicitationRequired": false,
-                            "prompts": {}
-                        },
-                        {
-                            "name": "kg",
-                            "type": "kg",
-                            "confirmationRequired": false,
-                            "elicitationRequired": false,
-                            "prompts": {}
                         }
                     ]
                 }
             ]
-        },
-        "prompts": [
-            {
-                "id": "Elicit.Intent-weight.IntentSlot-FirstWholeNumber",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "体重をキログラムで答えてください。"
-                    }
-                ]
-            }
-        ]
+        }
     }
 }

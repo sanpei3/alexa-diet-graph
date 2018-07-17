@@ -58,18 +58,25 @@ function updateDiet(weight, accessToken, self) {
     };
     
     rp(options).then((response) => {
-	self.attributes['serverError'] = 0;
-	self.emit(':tell',  weight + 'kg で記録しました。');
+	if (response.match(/<p>ログアウトまたはタイムアウトしました。<\/p>/)) {
+	    self.attributes['serverError'] = 0;
+	    self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。アカウントリンクを再設定してください');
+	} else if (response.match(/登録しました。<br>/)) {
+	    self.attributes['serverError'] = 0;
+	    self.emit(':tell', weight + 'kg で記録しました。');
+	} else {
+	    self.attributes['serverError'] = 0;
+	    self.emit(':tell', '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください');
+	}
     }, (error) => {
 	var serverError = Number(t.attributes['serverError']);
 	if (isNaN(serverError) || serverError == 0) {
 	    self.attributes['serverError'] = 1;
-            self.emit(':ask',  '記録に失敗しました。再度体重を教えてください。');
+	    self.emit(':ask', '記録に失敗しました。再度体重を教えてください。');
 	} else {
 	    self.attributes['serverError'] = 0;
-            self.emit(':tell',  '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください');
+	    self.emit(':tell', '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください');
 	}
-	
     });
 }
  
@@ -94,11 +101,28 @@ const handlers = {
 	    this.emit(':tellWithLinkAccountCard','スキルを利用するために体重グラフでのアカウントリンク設定をしてください');
             return;
         }
+	var options = {
+	    method: 'GET',
+	    uri: "https://diet.dyndns.org/?cmd=oa2_isvalid",
+	    headers: {
+		'Authorization': "Bearer " + accessToken, 
+	    },
+	};
+	rp(options).then((response) => {
+	    if (response == '{"isValid":false}') {
+		this.attributes['serverError'] = 0;
+		this.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。アカウントリンクを再設定してください');
+		return;
+	    }
+	}, (error) => {
+	    this.attributes['serverError'] = 0;
+	    this.emit(':tell',  '体重グラフのサーバが不調な可能性があります時間を置いてから試みてください');
+	    return;
+	});
         if (this.event.request.intent != undefined) {
             const intent = this.event.request.intent;
             if (intent.slots.FirstWholeNumber != undefined) {
                 const FirstWholeNumberString = this.event.request.intent.slots.FirstWholeNumber.value;
-                //console.error(weightString);
                 let weight = Number(FirstWholeNumberString);
 
                 if (!isNaN(weight)) {

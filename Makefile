@@ -1,7 +1,10 @@
+MODULE=weight
+FUNCTION_NAME=weight
 all:
-	zip -r -q weight.zip index.js node_modules
-	aws s3 --profile s3-upload-lambda cp weight.zip s3://sanpei/alexa-diet-graph/
-	echo https://s3-ap-northeast-1.amazonaws.com/sanpei/alexa-diet-graph/weight.zip
+	node index.js
+	zip -r -q ${MODULE} index.js  node_modules
+	aws lambda update-function-code --function-name "${FUNCTION_NAME}" --zip-file fileb://${MODULE}.zip
+
 
 install-module:
 	npm install request-promise

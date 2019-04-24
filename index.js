@@ -8,6 +8,7 @@
 const Alexa = require('alexa-sdk');
 const rp = require("request-promise");
 
+// If you use node.js 8.10 and later, you must to set enviroment variable on lambda console
 process.env.TZ = "Asia/Tokyo";
 
 // please define "Environment variables " field at AWS lambda console

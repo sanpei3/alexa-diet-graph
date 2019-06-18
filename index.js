@@ -48,7 +48,19 @@ function updateDiet(weight, accessToken, self) {
     var month = (new Date(date).getMonth() +1).toString();
     var day = new Date(date).getDate().toString();
     var hour = new Date(date).getHours().toString();
-    var server_error_message = '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください';
+    const server_error_message = '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください';
+    const daysYomi = [
+	" いちにち",
+	"ふつか",
+	"みっか",
+	"よっか",
+	"いつか",
+	"むいか",
+	"なのか",
+	"ようか",
+	"ここのか",
+	"とおか",
+    ];
     
     var options = {
         method: 'POST',
@@ -94,7 +106,8 @@ function updateDiet(weight, accessToken, self) {
 		prevDays = parseInt(prevDiff / oneDay);
 		prevHours = parseInt((prevDiff % oneDay) / 60 / 60);
 
-		if (!(prevDays == 0 && prevHours == 0)) {
+		if (!(prevDays == 0 && prevHours == 0) &&
+		    !(prevDays == 0 && prevHours <= 12)) {
 		    prevWeight = val.weight;
 		    return true;
 		}
@@ -107,10 +120,14 @@ function updateDiet(weight, accessToken, self) {
 		self.emit(':ask', message);
 		return;
 	    }
-	    if (prevDays > 0) {
-		var diffMessage = prevDays +"日前から"
-	    } else {
-		var diffMessage = prevHours+ "時間前から"
+	    if (prevHours > 12) {
+		prevHours = 0;
+		prevDays = prevDays + 1;
+	    }
+	    if (prevDays <= 10) {
+		var diffMessage = daysYomi[prevDays - 1] +"前から"
+	    } else{
+		var diffMessage = prevDays + "前から"
 	    }
 	    if (diffWeight != 0) {
 		if (diffWeight > 0) {
@@ -190,20 +207,38 @@ const handlers = {
 	});
         if (this.event.request.intent != undefined) {
             const intent = this.event.request.intent;
+	    console.log(intent.slots);
             if (intent.slots.FirstWholeNumber != undefined) {
                 const FirstWholeNumberString = this.event.request.intent.slots.FirstWholeNumber.value;
                 let weight = Number(FirstWholeNumberString);
 
+		console.log(FirstWholeNumberString);
+		console.log(intent.slots.DotNumber);
+		console.log(intent.slots.YADotNumber);
                 if (!isNaN(weight)) {
                     if (intent.slots.DotNumber != undefined) {
-                        const DotNumberString = this.event.request.intent.slots.DotNumber.value;
-			var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
-			if (dotNumber == -1) {
-			    this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
-                        } else {
-			    weight = weight + dotNumber;
+			if (intent.slots.DotNumber.value != undefined) {
+                            const DotNumberString = this.event.request.intent.slots.DotNumber.value;
+			    var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+			    if (dotNumber == -1) {
+				this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
+                            } else {
+				weight = weight + dotNumber;
+			    }
+			}
+		    }
+		    if (intent.slots.YADotNumber != undefined) {
+			if (intent.slots.YADotNumber.value != undefined) {
+                            const DotNumberString = this.event.request.intent.slots.YADotNumber.value;
+			    var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+			    if (dotNumber == -1) {
+				this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
+                            } else {
+				weight = weight + dotNumber;
+			    }
 			}
                     }
+
                     if ( 1 <= weight && weight <= 600 ) {
                         updateDiet(weight, accessToken, this);
                         return;

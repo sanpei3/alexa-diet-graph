@@ -207,14 +207,10 @@ const handlers = {
 	});
         if (this.event.request.intent != undefined) {
             const intent = this.event.request.intent;
-	    console.log(intent.slots);
             if (intent.slots.FirstWholeNumber != undefined) {
                 const FirstWholeNumberString = this.event.request.intent.slots.FirstWholeNumber.value;
                 let weight = Number(FirstWholeNumberString);
 
-		console.log(FirstWholeNumberString);
-		console.log(intent.slots.DotNumber);
-		console.log(intent.slots.YADotNumber);
                 if (!isNaN(weight)) {
                     if (intent.slots.DotNumber != undefined) {
 			if (intent.slots.DotNumber.value != undefined) {

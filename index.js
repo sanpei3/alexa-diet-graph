@@ -142,7 +142,7 @@ function updateDiet(weight, accessToken, self) {
 	rp(options).then((response) => {
 	    if (response.match(/<p>ログアウトまたはタイムアウトしました。<\/p>/)) {
 		self.attributes['serverError'] = 0;
-		self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。アカウントリンクを再設定してください');
+		self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
 	    } else if (response.match(/登録しました。<br>/)) {
 		self.attributes['serverError'] = 0;
 		self.emit(':tell', weight + 'kg で記録しました。' + diffMessage);
@@ -184,7 +184,9 @@ const handlers = {
     'weight': function () {
         let accessToken = this.event.session.user.accessToken;
         if (accessToken == undefined) {
-	    this.emit(':tellWithLinkAccountCard','スキルを利用するために体重グラフでのアカウントリンク設定をしてください');
+	    this.emit(':tellWithLinkAccountCard','体重を記録するには、体重グラフのアカウントが必要です。' +
+                    'Alexaアプリを使用してAmazonアカウントと体重グラフのアカウントを' +
+                    'リンクしてください。');
             return;
         }
 	var options = {
@@ -197,7 +199,7 @@ const handlers = {
 	rp(options).then((response) => {
 	    if (response == '{"isValid":false}') {
 		this.attributes['serverError'] = 0;
-		this.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。アカウントリンクを再設定してください');
+		this.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
 		return;
 	    }
 	}, (error) => {

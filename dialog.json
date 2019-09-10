@@ -46,9 +46,34 @@
                         {
                             "name": "dot",
                             "type": "dot"
+                        },
+                        {
+                            "name": "YADotNumber",
+                            "type": "YADotNumber"
                         }
                     ],
                     "samples": [
+                        "{FirstWholeNumber} {dot} {YADotNumber} と",
+                        "{FirstWholeNumber} {dot} {YADotNumber} とつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} と記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} で",
+                        "{FirstWholeNumber} {dot} {YADotNumber} でつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} で記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} を",
+                        "{FirstWholeNumber} {dot} {YADotNumber} をつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} を記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} 記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg}",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} と",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} とつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} と記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} で",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} でつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} で記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} を",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} をつけて",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} を記録してくれる",
+                        "{FirstWholeNumber} {dot} {YADotNumber} {kg} 記録してくれる",
                         "{FirstWholeNumber}",
                         "{FirstWholeNumber} と",
                         "{FirstWholeNumber} とつけて",
@@ -59,6 +84,7 @@
                         "{FirstWholeNumber} を",
                         "{FirstWholeNumber} をつけて",
                         "{FirstWholeNumber} を記録してくれる",
+                        "{FirstWholeNumber} 記録してくれる",
                         "{FirstWholeNumber} {dot} {DotNumber}",
                         "{FirstWholeNumber} {dot} {DotNumber} と",
                         "{FirstWholeNumber} {dot} {DotNumber} とつけて",
@@ -69,6 +95,7 @@
                         "{FirstWholeNumber} {dot} {DotNumber} を",
                         "{FirstWholeNumber} {dot} {DotNumber} をつけて",
                         "{FirstWholeNumber} {dot} {DotNumber} を記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} 記録してくれる",
                         "{FirstWholeNumber} {kg}",
                         "{FirstWholeNumber} {kg} と",
                         "{FirstWholeNumber} {kg} とつけて",
@@ -79,6 +106,7 @@
                         "{FirstWholeNumber} {kg} を",
                         "{FirstWholeNumber} {kg} をつけて",
                         "{FirstWholeNumber} {kg} を記録してくれる",
+                        "{FirstWholeNumber} {kg} 記録してくれる",
                         "{FirstWholeNumber} {dot} {DotNumber} {kg}",
                         "{FirstWholeNumber} {dot} {DotNumber} {kg} と",
                         "{FirstWholeNumber} {dot} {DotNumber} {kg} とつけて",
@@ -88,8 +116,13 @@
                         "{FirstWholeNumber} {dot} {DotNumber} {kg} で記録してくれる",
                         "{FirstWholeNumber} {dot} {DotNumber} {kg} を",
                         "{FirstWholeNumber} {dot} {DotNumber} {kg} をつけて",
-                        "{FirstWholeNumber} {dot} {DotNumber} {kg} を記録してくれる"
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg} を記録してくれる",
+                        "{FirstWholeNumber} {dot} {DotNumber} {kg}  記録してくれる"
                     ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -100,6 +133,7 @@
                             "name": {
                                 "value": "kg",
                                 "synonyms": [
+                                    "Kg",
                                     "キログラム",
                                     "キロ",
                                     "k"
@@ -115,6 +149,10 @@
                             "name": {
                                 "value": "dot ",
                                 "synonyms": [
+                                    "x",
+                                    "テン",
+                                    "フン",
+                                    "ネン",
                                     "どっと",
                                     "ドット",
                                     "ねん",
@@ -123,6 +161,101 @@
                                     "分",
                                     "てん",
                                     "点"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "YADotNumber",
+                    "values": [
+                        {
+                            "id": "0",
+                            "name": {
+                                "value": "0",
+                                "synonyms": [
+                                    "0"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "9",
+                            "name": {
+                                "value": "9",
+                                "synonyms": [
+                                    "9"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8",
+                            "name": {
+                                "value": "8",
+                                "synonyms": [
+                                    "8"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "7",
+                            "name": {
+                                "value": "7",
+                                "synonyms": [
+                                    "7"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "6",
+                            "name": {
+                                "value": "6",
+                                "synonyms": [
+                                    "6"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "5",
+                            "name": {
+                                "value": "5",
+                                "synonyms": [
+                                    "5"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "4",
+                            "name": {
+                                "value": "4",
+                                "synonyms": [
+                                    "4"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "3",
+                            "name": {
+                                "value": "3",
+                                "synonyms": [
+                                    "3"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "2",
+                                "synonyms": [
+                                    "2"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "1",
+                                "synonyms": [
+                                    "1"
                                 ]
                             }
                         }

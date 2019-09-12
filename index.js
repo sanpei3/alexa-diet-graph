@@ -100,19 +100,20 @@ function updateDiet(weight, accessToken, self) {
 	var oneDay = 60*60*24;
 	var diffMessage = "";
 
-	res.data.some(function(val, index) {
-	    if (isNoon(val.timestamp*1000) == noonFlag) {
-		prevDiff = val.diff;
-		prevDays = parseInt(prevDiff / oneDay);
-		prevHours = parseInt((prevDiff % oneDay) / 60 / 60);
-
-		if (!(prevDays == 0 && prevHours == 0) &&
-		    !(prevDays == 0 && prevHours <= 12)) {
-		    prevWeight = val.weight;
-		    return true;
+	if (res.data != undefined) {
+	    res.data.some(function(val, index) {
+		if (isNoon(val.timestamp*1000) == noonFlag) {
+		    prevDiff = val.diff;
+		    prevDays = parseInt(prevDiff / oneDay);
+		    prevHours = parseInt((prevDiff % oneDay) / 60 / 60);
+		    if (!(prevDays == 0 && prevHours == 0) &&
+			!(prevDays == 0 && prevHours <= 12)) {
+			prevWeight = val.weight;
+			return true;
+		    }
 		}
-	    }
-	});
+	    });
+	}
 	if (prevWeight != 0) {
 	    var diffWeight = Math.round((weight - prevWeight)*10) * 100;
 	    if (Math.abs(diffWeight) >= 10*1000) {

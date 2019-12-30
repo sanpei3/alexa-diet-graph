@@ -232,12 +232,26 @@ const handlers = {
 		    }
 		    if (intent.slots.YADotNumber != undefined) {
 			if (intent.slots.YADotNumber.value != undefined) {
-                            const DotNumberString = this.event.request.intent.slots.YADotNumber.value;
-			    var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
-			    if (dotNumber == -1) {
-				this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
-                            } else {
-				weight = weight + dotNumber;
+			    if (intent.slots.YADotNumber.resolutions != undefined) {
+				if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority != undefined) {
+				    if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0] != undefined) {
+					if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].status != undefined) {
+					    if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].status.code != undefined) {
+						if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].status.code == "ER_SUCCESS_MATCH" ) {
+						    if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].status.code == "ER_SUCCESS_MATCH" ) {
+							const DotNumberString = intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].values[0].value.id;
+							var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+							if (dotNumber == -1) {
+							    this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
+							} else {
+							    weight = weight + dotNumber;
+							}
+						    }
+						}
+					    }
+					}
+				    }
+				}
 			    }
 			}
                     }

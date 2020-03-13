@@ -1,7 +1,7 @@
 {
   "name": "alexa-diet-graph",
   "version": "1.0.0",
-    "description": "Alexa skill for Weight Graph(TaIZyU Graph",
+  "description": "Alexa skill for Weight Graph(TaIZyU Graph",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sanpei3/alexa-diet-graph#readme",
   "dependencies": {
+    "agentkeepalive": "^4.1.0",
     "alexa-sdk": "^1.0.25",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"

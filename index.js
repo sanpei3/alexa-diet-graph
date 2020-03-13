@@ -7,6 +7,7 @@
 
 const Alexa = require('alexa-sdk');
 const rp = require("request-promise");
+const Agent = require('agentkeepalive');
 const timeout = 5 * 1000;
 const server_error_message = '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください。詳しくは体重グラフのウェブページを参照ください。';
 
@@ -15,6 +16,23 @@ process.env.TZ = "Asia/Tokyo";
 
 // please define "Environment variables " field at AWS lambda console
 const APP_ID = process.env.ALEXA_APP_ID;
+
+function handleRequest(options, timeout) {
+    // Add default request options
+    Object.assign(options, {
+	agentClass: options.uri.startsWith('https') ? Agent.HttpsAgent : Agent,
+	agentOptions: Object.assign({}, options.agentOptions, {
+	    // Set keep-alive free socket to timeout after 45s of inactivity
+	    freeSocketTimeout: 5000
+	}),
+	headers: Object.assign({}, options.headers, {
+	    'Cache-Control': 'no-cache'
+	}),
+	gzip: true,
+	timeout: parseInt(timeout)
+    });
+    return rp(options);
+}
 
 function isNoon(date) {
     var hour = new Date(date).getHours().toString();
@@ -91,7 +109,7 @@ function updateDiet(weight, accessToken, self) {
         },
     };
 
-    return rp(options_get_prev_weight).then((response) => {
+    return handleRequest(options_get_prev_weight, timeout).then((response) => {
 	var res = JSON.parse(response);
 
 	var date = Date.now();
@@ -103,6 +121,7 @@ function updateDiet(weight, accessToken, self) {
 	var oneDay = 60*60*24;
 	var diffMessage = "";
 
+	console.log(response);
 	if (res.data != undefined) {
 	    res.data.some(function(val, index) {
 		if (isNoon(val.timestamp*1000) == noonFlag) {
@@ -143,7 +162,7 @@ function updateDiet(weight, accessToken, self) {
 		diffMessage = diffMessage + "変化はありませんでした。";
 	    }
 	}
-	rp(options).then((response) => {
+	handleRequest(options, timeout).then((response) => {
 	    if (response.match(/<p>ログアウトまたはタイムアウトしました。<\/p>/)) {
 		self.attributes['serverError'] = 0;
 		self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
@@ -201,13 +220,14 @@ const handlers = {
 		'Authorization': "Bearer " + accessToken, 
 	    },
 	};
-	rp(options).then((response) => {
+	handleRequest(options, timeout).then((response) => {
 	    if (response == '{"isValid":false}') {
 		this.attributes['serverError'] = 0;
 		this.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
 		return;
 	    }
 	}, (error) => {
+	    console.log(error);
 	    this.attributes['serverError'] = 0;
 	    this.emit(':tell', server_error_message);
 	    return;

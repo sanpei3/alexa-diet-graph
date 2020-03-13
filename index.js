@@ -8,6 +8,7 @@
 const Alexa = require('alexa-sdk');
 const rp = require("request-promise");
 const timeout = 5 * 1000;
+const server_error_message = '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください。詳しくは体重グラフのウェブページを参照ください。';
 
 // If you use node.js 8.10 and later, you must to set enviroment variable on lambda console
 process.env.TZ = "Asia/Tokyo";
@@ -49,7 +50,6 @@ function updateDiet(weight, accessToken, self) {
     var month = (new Date(date).getMonth() +1).toString();
     var day = new Date(date).getDate().toString();
     var hour = new Date(date).getHours().toString();
-    const server_error_message = '記録に失敗しました。体重グラフのサーバが不調な可能性があります時間を置いてから試みてください。詳しくは体重グラフのウェブページを参照ください。';
     const daysYomi = [
 	" いちにち",
 	"ふつか",
@@ -84,7 +84,7 @@ function updateDiet(weight, accessToken, self) {
     
     var options_get_prev_weight = {
         method: 'GET',
-        uri: "http://diet.dyndns.org/?cmd=weight_prev&count=10",
+        uri: "http://diet.dyndns.org/?cmd=weight_prev&count=20",
 	timeout: timeout,
         headers: {
 	    'Authorization': "Bearer " + accessToken,

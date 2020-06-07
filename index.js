@@ -109,7 +109,7 @@ function updateDiet(weight, accessToken, self) {
         },
     };
 
-    return handleRequest(options_get_prev_weight, timeout).then((response) => {
+    return rp(options_get_prev_weight).then((response) => {
 	var res = JSON.parse(response);
 
 	var date = Date.now();
@@ -162,7 +162,7 @@ function updateDiet(weight, accessToken, self) {
 		diffMessage = diffMessage + "変化はありませんでした。";
 	    }
 	}
-	handleRequest(options, timeout).then((response) => {
+	rp(options).then((response) => {
 	    if (response.match(/<p>ログアウトまたはタイムアウトしました。<\/p>/)) {
 		self.attributes['serverError'] = 0;
 		self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
@@ -220,7 +220,7 @@ const handlers = {
 		'Authorization': "Bearer " + accessToken, 
 	    },
 	};
-	handleRequest(options, timeout).then((response) => {
+	rp(options).then((response) => {
 	    if (response == '{"isValid":false}') {
 		this.attributes['serverError'] = 0;
 		this.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');

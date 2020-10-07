@@ -81,24 +81,6 @@ function updateDiet(weight, accessToken, self) {
 	"とおか",
     ];
     
-    var options = {
-        method: 'POST',
-	uri: "https://diet.dyndns.org/",
-	timeout: timeout,
-	form: {
-	    'year' : year,
-	    'month' : month,
-	    'day' : day,
-	    'hour' : hour,
-	    'weight' : weight,
-	    'comment' : "",
-	    'cmd' : "user",
-	    'mode' : "input"
-	},
-        headers: {
-            'Authorization': "Bearer " + accessToken, 
-        },
-    };
     
     var options_get_prev_weight = {
         method: 'GET',
@@ -136,6 +118,36 @@ function updateDiet(weight, accessToken, self) {
 		}
 	    });
 	}
+	if (
+	    ((self.event.request.intent.slots.DotNumber == undefined)
+	     || ((self.event.request.intent.slots.DotNumber != undefined) &&
+		 (self.event.request.intent.slots.DotNumber.value == undefined)))
+	    && (prevWeight != 0)
+	    && (prevDays <= 7)) {
+	    const yetAnotherWeight = Math.floor(weight / 10) * 10 +
+		  (weight - Math.floor(weight / 10) * 10) / 10;
+	    if (Math.abs(yetAnotherWeight - prevWeight) < Math.abs(weight - prevWeight)) {
+		weight = yetAnotherWeight;
+	    }
+	}
+	var options = {
+            method: 'POST',
+	    uri: "https://diet.dyndns.org/",
+	    timeout: timeout,
+	    form: {
+		'year' : year,
+		'month' : month,
+		'day' : day,
+		'hour' : hour,
+		'weight' : weight,
+		'comment' : "",
+		'cmd' : "user",
+		'mode' : "input"
+	    },
+            headers: {
+		'Authorization': "Bearer " + accessToken, 
+            },
+	};
 	if (prevWeight != 0) {
 	    var diffWeight = Math.round((weight - prevWeight)*10) * 100;
 	    if (Math.abs(diffWeight) >= 10*1000) {

@@ -130,6 +130,7 @@ function updateDiet(weight, accessToken, self) {
 		weight = yetAnotherWeight;
 	    }
 	}
+	console.log("Request weight:" + weight);
 	var options = {
             method: 'POST',
 	    uri: "https://diet.dyndns.org/",
@@ -246,15 +247,19 @@ const handlers = {
 	});
         if (this.event.request.intent != undefined) {
             const intent = this.event.request.intent;
+	    console.log("slots" + JSON.stringify(intent.slots));
+
             if (intent.slots.FirstWholeNumber != undefined) {
                 const FirstWholeNumberString = this.event.request.intent.slots.FirstWholeNumber.value;
                 let weight = Number(FirstWholeNumberString);
+		console.log("FirstWholeNumber:" + FirstWholeNumberString);
 
                 if (!isNaN(weight)) {
                     if (intent.slots.DotNumber != undefined) {
 			if (intent.slots.DotNumber.value != undefined) {
                             const DotNumberString = this.event.request.intent.slots.DotNumber.value;
 			    var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+			    console.log("DotNumber:" + DotNumberString);
 			    if (dotNumber == -1) {
 				this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
                             } else {
@@ -273,6 +278,7 @@ const handlers = {
 						    if (intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].status.code == "ER_SUCCESS_MATCH" ) {
 							const DotNumberString = intent.slots.YADotNumber.resolutions.resolutionsPerAuthority[0].values[0].value.id;
 							var dotNumber = convertDotNumberStringToDotNumber(DotNumberString, 1);
+							console.log("YADotNumber:" + DotNumberString);
 							if (dotNumber == -1) {
 							    this.emit(':ask', '小数点以下は一桁までの対応です。もう一度、体重を教えてください。');
 							} else {
@@ -287,7 +293,12 @@ const handlers = {
 			    }
 			}
                     }
-
+		    if (intent.slots.DotNumber.value == undefined
+			&& intent.slots.YADotNumber.value == undefined
+			&& weight > 1000 && weight < 9999) {
+			weight = Math.floor(weight / 100) +
+			    (weight % 10) /10;
+		    }
                     if ( 1 <= weight && weight <= 600 ) {
                         updateDiet(weight, accessToken, this);
                         return;

@@ -119,22 +119,39 @@ function updateDiet(weight, accessToken, self) {
 	    });
 	}
 	var replaceMessage = "";
-	if (
-	    (
-		((self.event.request.intent.slots.DotNumber == undefined) ||
-		 ((self.event.request.intent.slots.DotNumber != undefined) &&
-		  (self.event.request.intent.slots.DotNumber.value == undefined)))  &&
-		    ((self.event.request.intent.slots.YADotNumber == undefined) ||
-		     ((self.event.request.intent.slots.YADotNumber != undefined) &&
-		      (self.event.request.intent.slots.YADotNumber.value == undefined))))
-	    && (prevWeight != 0)
-	    && (prevDays <= 7)) {
-	    const yetAnotherWeight = Math.floor(weight / 10) * 10 +
-		  (weight - Math.floor(weight / 10) * 10) / 10;
-	    if (Math.abs(yetAnotherWeight - prevWeight) < Math.abs(weight - prevWeight)) {
-		replaceMessage = wight + "kgと記録したい場合には、" + wight + "点ゼロkgと発話ください。";
-		weight = yetAnotherWeight;
+	if (((self.event.request.intent.slots.DotNumber == undefined) ||
+	     ((self.event.request.intent.slots.DotNumber != undefined) &&
+	      (self.event.request.intent.slots.DotNumber.value == undefined)))
+	    && ((self.event.request.intent.slots.YADotNumber == undefined) ||
+		((self.event.request.intent.slots.YADotNumber != undefined) &&
+		 (self.event.request.intent.slots.YADotNumber.value == undefined)))) {
+	    if (weight > 1000 && weight < 9999) {
+		// 百の位が0ならば、
+		if (Math.floor((weight % 1000) / 100) == 0) {
+		    // 百の位を無視する, 10の位は1のくらいへ、一のくらいは小数点
+		    weight = Math.floor(weight / 1000) * 10 +
+			Math.floor((weight % 100) / 10) +
+			(weight % 10) /10;
+		} else {
+		    // 十の位を小数点(無視)とする場合
+		    // 8であるかを見たほうがよいかも
+		    weight = Math.floor(weight / 100) +
+			(weight % 10) /10;
+		}
+	    } else if (weight < 100
+		  && (prevWeight != 0)
+		  && (prevDays <= 7)) {
+		const yetAnotherWeight = Math.floor(weight / 10) * 10 +
+		      (weight - Math.floor(weight / 10) * 10) / 10;
+		if (Math.abs(yetAnotherWeight - prevWeight) < Math.abs(weight - prevWeight)) {
+		    replaceMessage = wight + "kgと記録したい場合には、" + wight + "点ゼロkgと発話ください。";
+		    weight = yetAnotherWeight;
+		}
 	    }
+	}
+	if (weight > 600 ) {
+	    self.emit(':ask', '600キログラム以下に対応しています。もう一度、体重を教えてください。');
+	    return
 	}
 	console.log("Request weight:" + weight);
 	var options = {
@@ -157,7 +174,7 @@ function updateDiet(weight, accessToken, self) {
 	};
 	if (prevWeight != 0) {
 	    var diffWeight = Math.round((weight - prevWeight)*10) * 100;
-	    if (Math.abs(diffWeight) >= 10*1000) {
+	    if ((Math.abs(diffWeight) >= 10*1000) && (prevDays <= 7)) {
 		const message = weight +"kgと前回から10kg以上の変化があります、もう一度、体重を教えてください。";
 		self.emit(':ask', message);
 		return;
@@ -299,18 +316,8 @@ const handlers = {
 			    }
 			}
                     }
-		    if (intent.slots.DotNumber.value == undefined
-			&& intent.slots.YADotNumber.value == undefined
-			&& weight > 1000 && weight < 9999) {
-			weight = Math.floor(weight / 100) +
-			    (weight % 10) /10;
-		    }
-                    if ( 1 <= weight && weight <= 600 ) {
-                        updateDiet(weight, accessToken, this);
-                        return;
-                    } else {
-			this.emit(':ask', '600キログラム以下に対応しています。もう一度、体重を教えてください。');
-		    }
+		    updateDiet(weight, accessToken, this);
+		    return;
                 }
             }  
         }

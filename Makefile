@@ -1,5 +1,6 @@
 MODULE=weight
-FUNCTION_NAME=weight
+#FUNCTION_NAME=weight
+FUNCTION_NAME=weight-alexa-test
 all:
 	node index.js
 	zip -r -q ${MODULE} index.js  node_modules

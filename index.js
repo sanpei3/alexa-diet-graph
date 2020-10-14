@@ -118,15 +118,21 @@ function updateDiet(weight, accessToken, self) {
 		}
 	    });
 	}
+	var replaceMessage = "";
 	if (
-	    ((self.event.request.intent.slots.DotNumber == undefined)
-	     || ((self.event.request.intent.slots.DotNumber != undefined) &&
-		 (self.event.request.intent.slots.DotNumber.value == undefined)))
+	    (
+		((self.event.request.intent.slots.DotNumber == undefined) ||
+		 ((self.event.request.intent.slots.DotNumber != undefined) &&
+		  (self.event.request.intent.slots.DotNumber.value == undefined)))  &&
+		    ((self.event.request.intent.slots.YADotNumber == undefined) ||
+		     ((self.event.request.intent.slots.YADotNumber != undefined) &&
+		      (self.event.request.intent.slots.YADotNumber.value == undefined))))
 	    && (prevWeight != 0)
 	    && (prevDays <= 7)) {
 	    const yetAnotherWeight = Math.floor(weight / 10) * 10 +
 		  (weight - Math.floor(weight / 10) * 10) / 10;
 	    if (Math.abs(yetAnotherWeight - prevWeight) < Math.abs(weight - prevWeight)) {
+		replaceMessage = wight + "kgと記録したい場合には、" + wight + "点ゼロkgと発話ください。";
 		weight = yetAnotherWeight;
 	    }
 	}
@@ -181,7 +187,7 @@ function updateDiet(weight, accessToken, self) {
 		self.emit(':tellWithLinkAccountCard','アカウントリンクの有効期限が切れているようです。Alexaアプリを使用してアカウントリンクを再設定してください');
 	    } else if (response.match(/登録しました。<br>/)) {
 		self.attributes['serverError'] = 0;
-		self.emit(':tell', weight + 'kg で記録しました。' + diffMessage);
+		self.emit(':tell', weight + 'kg で記録しました。' + diffMessage + replaceMessage);
 	    } else {
 		self.attributes['serverError'] = 0;
 		self.emit(':tell', server_error_message);

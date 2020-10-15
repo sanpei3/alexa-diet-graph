@@ -144,7 +144,7 @@ function updateDiet(weight, accessToken, self) {
 		const yetAnotherWeight = Math.floor(weight / 10) * 10 +
 		      (weight - Math.floor(weight / 10) * 10) / 10;
 		if (Math.abs(yetAnotherWeight - prevWeight) < Math.abs(weight - prevWeight)) {
-		    replaceMessage = wight + "kgと記録したい場合には、" + wight + "点ゼロkgと発話ください。";
+		    replaceMessage = weight + "kgと記録したい場合には、" + weight + "点ゼロkgと発話ください。";
 		    weight = yetAnotherWeight;
 		}
 	    }

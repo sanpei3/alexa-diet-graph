@@ -187,7 +187,7 @@ function updateDiet(weight, accessToken, self) {
 	    if (prevDays <= 10) {
 		var diffMessage = daysYomi[prevDays - 1] +"前から"
 	    } else{
-		var diffMessage = prevDays + "前から"
+		var diffMessage = prevDays + "日前から"
 	    }
 	    if (diffWeight != 0) {
 		if (diffWeight > 0) {

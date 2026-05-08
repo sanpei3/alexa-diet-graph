@@ -8,6 +8,8 @@ all:
 
 
 install-module:
+	npm install agentkeepalive
 	npm install request-promise
 	npm install request
-	npm install alexa-sdk
+	npm install --save ask-sdk
+	npm install --save ask-sdk-v1adapter

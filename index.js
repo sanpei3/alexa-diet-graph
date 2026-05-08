@@ -5,7 +5,8 @@
 
 'use strict';
 
-const Alexa = require('alexa-sdk');
+//const Alexa = require('alexa-sdk');
+const Alexa = require('ask-sdk-v1adapter');
 const rp = require("request-promise");
 const Agent = require('agentkeepalive');
 const timeout = 5 * 1000;

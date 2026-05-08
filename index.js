@@ -342,9 +342,26 @@ const handlers = {
     },
 };
  
+/*
 exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context, callback);
     alexa.appId = APP_ID;
     alexa.registerHandlers(handlers);
     alexa.execute();
+};
+*/
+exports.handler = async (event, context) => { // async を付与、callbackは削除
+    return new Promise((resolve, reject) => {
+        // v1adapter の処理を Promise の中で実行
+        const alexa = Alexa.handler(event, context, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        });
+
+        // 既存のスキルロジック実行
+        alexa.registerHandlers(handlers);
+        alexa.execute();
+    });
 };
